@@ -1,22 +1,9 @@
-;;notes
-;;preload json from server and use delay on client side
-;; -> I wasted time here trying to do just that
-;; with a new library in the handler that I am not familiar with
-;;use cljs http and core.async with <!
+	I forgot to delete my notes/comments on my last commit and can delete them if need be.  I just didn't want to have more code commits after the 3 hour window to complete the assignment.  The code added to my reagent template is under cljs/falcon_sample_thurmond/core.cljs.  I also added some bootstrap css in handler.clj.  The code is architected with a web form that takes in user input with a text field and a search button. The search button fires off a web request to the open-cage api to get the lat-longs for the city and then feeds the open-cage response coordinates to another get request for the dark-sky api.
+	If I were going to do this project again, I would do some things different.  Even though this is a client facing app, I wanted to preload the pre-defined city list on the page load.  I'm just not familiar with the reitit-ring library and struggled to get this to work so I swapped to parsing the json client side.  Second, I think I would use cljs-http and core.async instead of doing my function calls, logic and state change in the success handlers for the GET requests from ajax.core library.  This way I could used the response from the cljs-http to do my logic in the on-click handler for the search button.  Lastly, I should have studied the api docs from dark-sky and open-cage a little more before starting the project.  This would have saved me some time when getting the desired data from the response for each request.
 
-;;;find days with date math or see note below
-
-;add a day column and then convert the "time" or "sunriseTime" key
-; from the weather map from an int to the appropriate date time.
-; I got hung up trying to convert it in a timely manner.
-; I would have brought in moment js for the time conversion
-
-;;add spinner when searching in re-frame modal panel
-;;replace spaces with '+'
-
-;;do a better job filtering the list when getting lat longs based on city.
-;;I would concat :name and :subcountry.  Issue being if someone for example,
-;; types in ID instead of Idaho
-
-;;I should have studies the api docs for dark sky and open cage before starting,
-;; it would have saved me some time pulling out the data
+Here are somethings the project is missing:
+1) The date/day of the week for each day of the weather.  You can get this from the "time" or "sunriseTime" key from the dark-sky response.  I was unable to complete this before time ran out.  I was using js/Date but reflecting back, I would pull in moment.js library and get the date from the integer value tied to “time”
+2) I would add a spinner nested in a re-frame modal panel after the user clicks search so the user knows that the weather search is running
+3) Better error handling from the dark-sky and open-cage get request error handlers
+4) Replace spaces with '+' for the open-cage get request.  The program appears to still work
+5) Investigate other ways of matching user input for the city compared to the pre-defined list.  You could concatenate the values for :name and :subcountry.  This could cause an issue for search errors where if someone, for example, types in Boise, ID instead of Boise, Idaho the request to open-cage would fail.
